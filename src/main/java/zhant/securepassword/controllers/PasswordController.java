@@ -14,7 +14,7 @@ public class PasswordController {
 	@Autowired
 	private PasswordService passwordService;
 	
-	@PostMapping(name="/validate-password")
+	@PostMapping(value="/validate-password")
 	public ResponseEntity<FailureResponse> validatePassword(@RequestBody BodyRequest request){//Retorna o erro, caso não tenha erro e a senha esteja valida, vai apenas retornar sem conteudo.
 		
 		var failures = passwordService.listOfFails(request.password());
