@@ -12,11 +12,16 @@ public class PasswordService {
 	public List<String> listOfFails(String password){
 		List<String> failures = new ArrayList<String>();
 		
+		validateIsNotNull(password,failures);
+		if (!failures.isEmpty()) {//Para não retornar exceção é preciso já retornar a badrequest, se não dar erro no servidor
+			return failures;
+		}
 		validateLength(password, failures);
 		validateUppercaseLetter(password, failures);
 		validateLowercaseLetter(password, failures);
 		validateNumber(password, failures);
 		validateEspecialCaracter(password, failures);
+		
 		
 		return failures;
 	}
@@ -44,11 +49,14 @@ public class PasswordService {
 			failures.add("A senha deve conter pelo menos um caractere especial.");
 		}
 	}
-
-	private void validateLength(String password, List<String> failures) {
-		if(password == null) {
+	
+	private void validateIsNotNull(String password, List<String> failures) {
+		if(password == null || password == "" || password.isEmpty()) {
 			failures.add("A senha não pode ser nula.");
 		}
+	}
+
+	private void validateLength(String password, List<String> failures) {
 		if(password.length() < 8) {
 			failures.add("Senha possui que menos 8 digitos.");
 		}
