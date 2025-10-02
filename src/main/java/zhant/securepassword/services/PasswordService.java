@@ -4,10 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PasswordService {
+	
+    @Autowired
+    private MessageSource messageSource;
+
+    private String getMessage(String key) {
+        return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+    }
 
 	public List<String> listOfFails(String password){
 		List<String> failures = new ArrayList<String>();
@@ -28,37 +38,38 @@ public class PasswordService {
 
 	private void validateUppercaseLetter(String password, List<String> failures) {
 		if(!Pattern.matches(".*[A-Z].*", password)) {
-			failures.add("A senha deve conter pelo menos uma letra maiuscula.");
+			failures.add(getMessage("password.uppercase"));
 		}
 	}
+
 	
 	private void validateLowercaseLetter(String password, List<String> failures) {
 		if(!Pattern.matches(".*[a-z].*", password)) {
-			failures.add("A senha deve conter pelo menos uma letra minuscula.");
+			failures.add(getMessage("password.lowercase"));
 		}
 	}
 	
 	private void validateNumber(String password, List<String> failures) {
 		if(!Pattern.matches(".*[0-9].*", password)) {
-			failures.add("A senha deve conter pelo menos um numero.");
+			failures.add(getMessage("password.number"));
 		}
 	}
 	
 	private void validateEspecialCaracter(String password, List<String> failures) {
 		if(!Pattern.matches(".*[\\W].*", password)) {
-			failures.add("A senha deve conter pelo menos um caractere especial.");
+			failures.add(getMessage("password.special"));
 		}
 	}
 	
 	private void validateIsNotNull(String password, List<String> failures) {
 		if(password == null || password == "" || password.isEmpty()) {
-			failures.add("A senha não pode ser nula.");
+			failures.add(getMessage("password.null"));
 		}
 	}
 
 	private void validateLength(String password, List<String> failures) {
 		if(password.length() < 8) {
-			failures.add("Senha possui que menos 8 digitos.");
+			failures.add(getMessage("password.length"));
 		}
 	}
 	
